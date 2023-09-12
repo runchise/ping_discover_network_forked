@@ -1,4 +1,4 @@
-name: ping_discover_network
+name: ping_discover_network_forked
 description: Library that allows to ping IP subnet and discover network devices. Could be used to find printers and other devices and services in a local network.
 version: 1.0.0
 author: Andrey Ushakov <flutter@tablemi.com>
