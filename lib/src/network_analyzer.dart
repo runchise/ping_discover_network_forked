@@ -65,6 +65,8 @@ class NetworkAnalyzer {
     String subnet,
     int port, {
     Duration timeout = const Duration(seconds: 5),
+    int start = 1,
+    int end = 256
   }) {
     if (port < 1 || port > 65535) {
       throw 'Incorrect port';
@@ -73,7 +75,7 @@ class NetworkAnalyzer {
 
     final out = StreamController<NetworkAddress>();
     final futures = <Future<Socket>>[];
-    for (int i = 1; i < 256; ++i) {
+    for (int i = start; i < end; ++i) {
       final host = '$subnet.$i';
       final Future<Socket> f = _ping(host, port, timeout);
       futures.add(f);
@@ -108,14 +110,18 @@ class NetworkAnalyzer {
     });
   }
 
+  
   // 13: Connection failed (OS Error: Permission denied)
   // 49: Bind failed (OS Error: Can't assign requested address)
+  // 51: Network is unreachable
   // 61: OS Error: Connection refused
   // 64: Connection failed (OS Error: Host is down)
   // 65: No route to host
   // 101: Network is unreachable
+  // 110: Connection timed out
   // 111: Connection refused
   // 113: No route to host
   // <empty>: SocketException: Connection timed out
   static final _errorCodes = [13, 49, 61, 64, 65, 101, 111, 113];
+  static final _errorCodes = [13, 49, 51, 61, 64, 65, 101, 110, 111, 113];
 }
